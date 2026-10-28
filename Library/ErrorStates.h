@@ -4,8 +4,9 @@
 # define OK 0
 #define NOK 1
 # define NULLPTR 2
+# define TIMEOUT_ERR 3
+
+
 # define NULL (void*) 0
-
-
 
 # endif
