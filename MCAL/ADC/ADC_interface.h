@@ -47,7 +47,10 @@ typedef enum
 
 
 void ADC_voidInit(void);
-uint8t ADC_getChannelReading(ADC_Channels_t copy_ADCchanel,uint16t * copy_pu16ADC_data);
-uint8t ADC_getChannel8bitReading(ADC_Channels_t copy_ADCchanel,uint8t * copy_pu8ADC_data);
+uint8t ADC_StartConversionSync(ADC_Channels_t copy_ADCchanel,uint16t * copy_pu16ADC_data);
+
+# if ADLAR_MODE==u8LEFTADJUST
+uint8t ADC_StartConversion8bitSync(ADC_Channels_t copy_ADCchanel,uint8t * copy_pu8ADC_data);
+#endif
 
 #endif /* ADC_INTERFACE_H_ */
