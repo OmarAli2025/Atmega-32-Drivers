@@ -19,11 +19,11 @@
  	 	 	 	 	 	 	 	 	 	 	 	 	 	 	 	 	 	 	 	 	 	 	 	  	 u8LEFTADJUST
  	 	 	 	 	 	 	 	 	 	 	 	 	 	 	 	 	 	 	 	 	 	 	 	  	 u8RIGHTADJUST 	 	 */
 
-# define ADLAR_MODE 														  	 u8RIGHTADJUST
-																									/*ADLAR  MUST BE ATLEFT MODE AT 8bit Resultion Func
+# define ADLAR_MODE 														  	 u8LEFTADJUST
+																									/*ADLAR  MUST BE ATLEFT MODE AT 8bit Resultion Func*/
 
 
-/*				Configure ADC Prescaler:
+/*		Configure ADC Prescaler:
  	 	 	 	 	 	 	 	 	 	 	 	 	 	 	 u8_DIV2
  	 	 	 	 	 	 	 	 	 	 	 	 	 	 	 u8_DIV4
  	 	 	 	 	 	 	 	 	 	 	 	 	 	 	 u8_DIV8
@@ -33,6 +33,7 @@
  	 	 	 	 	 	 	 	 	 	 	 	 	 	 	 u8_DIV128*/
 
 # define ADC_PRESCALARDIV  u8_DIV128
+# define ADC_u32TIMEOUT        5000UL
 
 
 

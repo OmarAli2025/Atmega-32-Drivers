@@ -51,9 +51,10 @@ void ADC_voidInit(void)
 
 }
 
-uint8t ADC_getChannelReading(ADC_Channels_t copy_ADCchanel,uint16t * copy_pu16ADC_data)
+uint8t ADC_StartConversionSync(ADC_Channels_t copy_ADCchanel,uint16t * copy_pu16ADC_data)
 {
 	uint8t local_u8ErrorState=OK;
+	uint32t local_u32Counter=0;
 
 	if(copy_pu16ADC_data==NULL)
 	{
@@ -73,25 +74,40 @@ uint8t ADC_getChannelReading(ADC_Channels_t copy_ADCchanel,uint16t * copy_pu16AD
 		/*Start Conversion*/
 		ADCSRA|=(1<<ADCSRA_ADSC);
 
-		/*Polling On Flag Till Conversion FInish*/
-		while(((ADCSRA >>ADCSRA_ADIF)&1)==0);
+		/*Wait with  blocking*/
+		while(((ADCSRA >>ADCSRA_ADIF)&1)==0 &&local_u32Counter<ADC_u32TIMEOUT)
+		{
+			local_u32Counter++;
 
-		/*Clear Flag by Writing logical One*/
-		ADCSRA|=(1<<ADCSRA_ADIF) ;
+		}
+		if(local_u32Counter==ADC_u32TIMEOUT)
+		{
+			local_u8ErrorState=TIMEOUT_ERR;
+		}
+		else
+		{
+			/*Clear Flag by Writing logical One*/
+			ADCSRA|=(1<<ADCSRA_ADIF) ;
 
 #if ADLAR_MODE==u8LEFTADJUST
-		*copy_pu16ADC_data = ADCLH >> 6;
+			*copy_pu16ADC_data = ADCLH >> 6;
 #elif ADLAR_MODE==u8RIGHTADJUST
-		*copy_pu16ADC_data = ADCLH;
+			*copy_pu16ADC_data = ADCLH;
 #endif
+		}
 	}
+
+
 
 
 	return local_u8ErrorState;
 }
 
-uint8t ADC_getChannel8bitReading(ADC_Channels_t copy_ADCchanel,uint8t * copy_pu8ADC_data)
+# if ADLAR_MODE==u8LEFTADJUST
+uint8t ADC_StartConversion8bitSync(ADC_Channels_t copy_ADCchanel,uint8t * copy_pu8ADC_data)
 {
+	uint32t local_u32Counter=0;
+
 	uint8t local_u8ErrorState=OK;
 
 	if(copy_pu8ADC_data==NULL)
@@ -113,15 +129,29 @@ uint8t ADC_getChannel8bitReading(ADC_Channels_t copy_ADCchanel,uint8t * copy_pu8
 		ADCSRA|=(1<<ADCSRA_ADSC);
 
 		/*Polling On Flag Till Conversion FInish*/
-		while(((ADCSRA >>ADCSRA_ADIF)&1)==0);
+		while(((ADCSRA >>ADCSRA_ADIF)&1)==0 &&local_u32Counter<ADC_u32TIMEOUT)
+		{
+			local_u32Counter++;
 
-		/*Clear Flag by Writing logical One*/
-		ADCSRA|=(1<<ADCSRA_ADIF) ;
+		}
 
-		*copy_pu8ADC_data = ADCH;
+		if(local_u32Counter==ADC_u32TIMEOUT)
+		{
+			local_u8ErrorState=TIMEOUT_ERR;
+		}
+		else
+		{
+			/*Clear Flag by Writing logical One*/
+			ADCSRA|=(1<<ADCSRA_ADIF) ;
+
+			*copy_pu8ADC_data = ADCH;
+		}
 	}
+
+
 
 
 	return local_u8ErrorState;
 }
 
+#endif
