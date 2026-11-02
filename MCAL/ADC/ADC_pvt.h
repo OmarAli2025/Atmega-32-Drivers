@@ -27,4 +27,8 @@
 # define ADCPRESCALAR_MUSK 0b111
 # define u8ADCCHANNELMUSK   0b11111
 
+# define IDLE 0
+# define BUSY 1
+# define SINGLECONVERSIONMODE 0
+# define CHAINCONVERSIONMODE 1
 #endif /* ADC_PVT_H_ */
